@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Live CAM</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
+  <style>body{margin:0;background:#000}video{width:100%}</style>
+</head>
+<body>
+  <video id="v" controls autoplay muted></video>
+  <script>
+    const v = document.getElementById('v');
+    if(Hls.isSupported()){
+      const hls = new Hls();
+      hls.loadSource('stream1/playlist.m3u8');
+      hls.attachMedia(v);
+      hls.on(Hls.Events.MANIFEST_PARSED,()=>v.play());
+    }else if(v.canPlayType('application/vnd.apple.mpegurl')){
+      v.src='stream1/playlist.m3u8';
+      v.addEventListener('loadedmetadata',()=>v.play());
+    }
+  </script>
+</body>
+</html>
