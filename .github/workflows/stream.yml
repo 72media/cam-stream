@@ -1,8 +1,8 @@
 name: RTSP → GitHub Pages
 on:
   schedule:
-    - cron: '*/3 * * * *'          # ทุก 3 นาที
-  workflow_dispatch:               # กดรันด้วยมือ
+    - cron: '*/3 * * * *'
+  workflow_dispatch:
 jobs:
   stream:
     runs-on: ubuntu-latest
@@ -14,15 +14,15 @@ jobs:
           curl -L https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz | tar xJ
           sudo mv ffmpeg-*/ffmpeg /usr/local/bin/ffmpeg
 
-            - name: Build HLS
+      - name: Build HLS
         run: |
           mkdir -p stream1
           ffmpeg -rtsp_transport tcp \
             -i rtsp://admin:hs8tv_2504@ramrome.thddns.net:3380/stream1 \
             -c:v copy -c:a copy -hls_time 3 -hls_list_size 6 \
             -hls_flags delete_segments -f hls stream1/playlist.m3u8 \
-            -t 10 || true                       # รันแค่ 10 วิ แล้วหยุด
-          ls -l stream1                         # ดูว่าเกิดไฟล์หรือไม่
+            -t 10 || true
+          ls -l stream1
 
       - name: Commit & push
         run: |
